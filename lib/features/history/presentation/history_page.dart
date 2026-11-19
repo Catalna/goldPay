@@ -87,7 +87,7 @@ class HistoryPage extends ConsumerWidget {
               final transaction = state.transactions[index - 1];
               return TransactionSummaryCard(
                 transaction: transaction,
-                onTap: () => context.push('/history/'),
+                onTap: () => context.push('/history/${transaction.id}'),
               );
             },
           );
