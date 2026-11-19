@@ -182,6 +182,14 @@ class _QuotePageState extends ConsumerState<QuotePage> {
                   emphasize: true,
                 ),
                 InfoRow(
+                  label: CopyId.labelGoldValue,
+                  value: formatRupiah(quote.goldValueIdr),
+                ),
+                InfoRow(
+                  label: CopyId.labelRounding,
+                  value: formatRupiah(quote.roundingIdr),
+                ),
+                InfoRow(
                   label: CopyId.labelBalanceBefore,
                   value: formatGoldUnits(balance),
                 ),
@@ -193,6 +201,8 @@ class _QuotePageState extends ConsumerState<QuotePage> {
             ),
           ),
           const SizedBox(height: GoldPayTokens.space12),
+          Text(CopyId.quoteRoundingNote, style: textTheme.bodySmall),
+          const SizedBox(height: GoldPayTokens.space8),
           Text(
             CopyId.disclaimerPrice,
             style: textTheme.bodySmall?.copyWith(color: GoldPayTokens.warning),

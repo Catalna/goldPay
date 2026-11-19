@@ -95,6 +95,11 @@ void main() {
     await _pumpQuote(tester, container, 500);
 
     expect(tester.takeException(), isNull);
+    await tester.scrollUntilVisible(
+      find.text(CopyId.statusInsufficient),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text(CopyId.statusInsufficient), findsOneWidget);
     await scrollToConfirm(tester);
     expect(
