@@ -66,6 +66,9 @@ void main() {
     expect(find.text('Rp150.000'), findsOneWidget);
     expect(find.text(CopyId.labelQrAmountLocked), findsOneWidget);
     expect(find.byType(TextField), findsNothing);
+    expect(find.text(CopyId.labelSource), findsOneWidget);
+    expect(find.text(CopyId.valueSourceCamera), findsOneWidget);
+    expect(find.text(CopyId.valueSourcePaste), findsNothing);
 
     final button = tester.widget<FilledButton>(find.byType(FilledButton));
     expect(button.onPressed, isNotNull);
@@ -79,6 +82,7 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.byType(TextField), findsOneWidget);
+    expect(find.text(CopyId.valueSourcePaste), findsOneWidget);
     expect(
       tester.widget<FilledButton>(find.byType(FilledButton)).onPressed,
       isNull,

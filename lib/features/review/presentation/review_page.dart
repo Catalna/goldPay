@@ -9,6 +9,7 @@ import '../../../core/formatters/money.dart';
 import '../../../core/formatters/rupiah_input_formatter.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/demo_banner.dart';
+import '../../../core/widgets/info_row.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../checkout/application/checkout_controller.dart';
 import '../../shared/presentation/qris_copy.dart';
@@ -168,6 +169,12 @@ class _ReviewPageState extends ConsumerState<ReviewPage> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: GoldPayTokens.space4),
+                // Fallback sources must never pass for a camera scan (D-45).
+                InfoRow(
+                  label: CopyId.labelSource,
+                  value: sourceCopy(draft.source),
                 ),
               ],
             ),
