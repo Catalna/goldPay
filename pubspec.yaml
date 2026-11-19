@@ -1,0 +1,41 @@
+name: goldpay_demo
+description: "GoldPay — prototipe konsep pembayaran QRIS dengan konversi emas digital (simulasi, tanpa jaringan)."
+publish_to: 'none'
+
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.14.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  flutter_riverpod: ^3.5.0
+  go_router: ^18.1.4
+  image_picker: ^1.2.4
+  intl: ^0.20.3
+  material_ui: ^1.11.1
+  mobile_scanner: ^7.5.0
+  shared_preferences: ^2.5.6
+  uuid: ^4.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/test_qris/
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+          weight: 700

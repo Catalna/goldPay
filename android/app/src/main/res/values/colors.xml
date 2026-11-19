@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- GoldPay primary (docs/09 tokens) -->
+    <color name="goldpay_primary">#0F6B4F</color>
+</resources>
