@@ -47,7 +47,7 @@
 
 - Pengembang memakai Windows 10/11, Flutter stable, dan Android phone dengan USB debugging.
 - Versi paket diperiksa saat setup (`flutter pub add`), bukan disalin dari dokumen.
-- `mobile_scanner` mendukung kamera dan `analyzeImage` pada perangkat target (`minSdk 23`).
+- `mobile_scanner` mendukung kamera dan `analyzeImage` pada perangkat target (`minSdk 24`, D-46).
 - Saldo dan harga adalah angka sintetis yang jelas berlabel simulasi.
 - Pengguna demo memahami bahwa QR scan bukan pembayaran.
 - Satu operator menguasai prosedur reset dan fallback.

@@ -60,7 +60,18 @@ menginisialisasi repo di folder home — semua file pengguna akan ikut terlacak.
 
 ```powershell
 flutter pub add flutter_riverpod go_router mobile_scanner intl shared_preferences uuid
+flutter pub add image_picker
+flutter pub add flutter_localizations --sdk=flutter
+flutter pub add material_ui
 ```
+
+`image_picker` hanya dipakai untuk fallback "Pilih gambar QR" di Pengaturan demo (D-43):
+gambarnya dibaca `MobileScannerController.analyzeImage`, payload QR di-parse, lalu gambar
+dibuang. Tidak ada unggahan dan tidak ada izin gudang tambahan di luar yang diminta plugin.
+
+Flutter 3.47+ menandai `package:flutter/material.dart` sebagai deprecated. Semua impor Material
+memakai `package:material_ui/material_ui.dart` (paket resmi Material UI, sudah menjadi template
+Flutter 3.50). Jangan mencampur kedua impor dalam satu file.
 
 **Jangan** menambahkan:
 
@@ -119,8 +130,8 @@ flutter:
 ```kotlin
 android {
     defaultConfig {
-        minSdk = 23
-        // targetSdk & compileSdk mengikuti nilai stabil saat build
+        minSdk = 24        // minimum Flutter 3.50 stable (D-46)
+        // targetSdk & compileSdk mengikuti nilai stabil saat build (36 pada Flutter 3.50)
     }
 }
 ```
@@ -170,8 +181,8 @@ Future<void> main() async {
 
 ```dart
 MaterialApp.router(
-  locale: const Locale('id_ID'),
-  supportedLocales: const [Locale('id_ID')],
+  locale: const Locale('id', 'ID'),
+  supportedLocales: const [Locale('id', 'ID')],
   localizationsDelegates: GlobalMaterialLocalizations.delegates,
   theme: buildTheme(),
   routerConfig: router,

@@ -11,6 +11,8 @@
 
 | Key | Teks | Muncul di |
 |---|---|---|
+| `app.name` | `GoldPay` | AppBar beranda, judul aplikasi |
+| `badge.demo` | `DEMO` | Badge kecil di beranda, riwayat, dan kartu transaksi |
 | `disclaimer.short` | `Prototype. Tidak melakukan pembayaran sungguhan.` | Home (bawah AppBar) |
 | `disclaimer.banner` | `DEMO — merchant belum menerima pembayaran.` | Home, Scanner, Review, Quote, Processing, Result, History |
 | `disclaimer.receipt` | `Tidak ada emas yang dijual dan tidak ada dana yang ditransfer. Merchant belum dibayar.` | Receipt & detail transaksi |
@@ -35,6 +37,7 @@
 | `nav.viewHistory` | `Lihat riwayat` |
 | `nav.addGold` | `Tambah saldo demo` |
 | `nav.reset` | `Reset data demo` |
+| `nav.retry` | `Coba lagi` |
 
 ## 3. Label
 
@@ -48,6 +51,7 @@
 | `label.qrFee` | `Biaya dari QR (tip/kenyamanan)` |
 | `label.total` | `Total yang harus dibayar` |
 | `label.goldUsed` | `Emas terjual` |
+| `label.goldValue` | `Nilai emas` |
 | `label.goldPriceUsed` | `Harga konversi` |
 | `label.rounding` | `Pembulatan ke atas` |
 | `label.balanceBefore` | `Saldo sebelum` |
@@ -63,6 +67,8 @@
 | `label.source` | `Sumber` |
 | `label.crc` | `Integritas data (CRC)` |
 | `label.qrAmountLocked` | `Nominal dari QR — tidak dapat diubah` |
+| `label.configVersion` | `Versi konfigurasi` |
+| `label.historySection` | `Riwayat transaksi` |
 
 ## 4. Nilai fallback
 
@@ -89,6 +95,7 @@
 | `status.failed` | `Transaksi demo gagal` |
 | `status.quoteExpired` | `Penawaran kedaluwarsa` |
 | `status.insufficient` | `Saldo demo tidak cukup` |
+| `history.empty` | `Belum ada transaksi demo` |
 
 ## 6. Error parser (petakan per kode di `07_QRIS_PARSER_SPEC.md`)
 
@@ -128,12 +135,14 @@ Semua error di atas disertai tombol `nav.rescan` dan `nav.cancel`.
 |---|---|
 | `quote.validUntil` | `Penawaran berlaku sampai {time}` |
 | `quote.expiredBody` | `Harga dapat berubah. Perbarui penawaran untuk melanjutkan.` |
-| `quote.insufficientBody` | `Kekurangan {rupiah} ({gram} g) dari saldo demo Anda.` |
+| `quote.insufficientBody` | `Kekurangan {rupiah} ({gram}) dari saldo demo Anda.` |
 | `quote.roundingNote` | `Emas dibulatkan ke atas ke 0,0001 g terdekat agar menutup total pembayaran.` |
+| `quote.confirmIntro` | `Anda akan menjual emas untuk membayar nominal ini.` |
 | `validation.amountRequired` | `Masukkan nominal terlebih dahulu.` |
 | `validation.amountMin` | `Nominal minimum Rp1.000.` |
 | `validation.amountMax` | `Nominal maksimum Rp1.000.000.` |
 | `validation.amountInteger` | `Nominal harus berupa angka bulat rupiah.` |
+| `validation.goldInvalid` | `Masukkan jumlah gram yang valid (maksimal 4 desimal).` |
 
 ## 9. Dialog dan konfirmasi
 
@@ -162,8 +171,44 @@ Semua error di atas disertai tombol `nav.rescan` dan `nav.cancel`.
 | `settings.failureToggle` | `Paksa gagal transaksi berikutnya` |
 | `settings.failureHint` | `Untuk menguji alur gagal. Saldo tidak akan berkurang.` |
 | `settings.devOnly` | `Kontrol demo — bukan fitur pengguna` |
+| `settings.galleryError` | `Gambar tidak dapat dibaca.` |
+| `settings.section.balance` | `Saldo demo` |
+| `settings.section.data` | `Data demo` |
+| `settings.section.info` | `Info demo` |
+| `settings.appVersion` | `Versi aplikasi` |
+| `settings.txCount` | `Transaksi tersimpan` |
 
-## 11. Aturan penulisan
+## 11. Scanner
+
+| Key | Teks |
+|---|---|
+| `scanner.title` | `Scan QRIS` |
+| `scanner.hint` | `Arahkan ke kode QRIS merchant` |
+| `scanner.torch` | `Flash` |
+| `scanner.processing` | `Membaca QR…` |
+| `scanner.deniedBody` | `Kamera tidak dapat dipakai. Berikan izin kamera, atau pakai tempel payload di Pengaturan demo.` |
+| `scanner.errorBody` | `Kamera gagal dibuka. Coba lagi atau pakai tempel payload di Pengaturan demo.` |
+| `scanner.pasteFallback` | `Tempel payload manual` |
+
+## 12. Judul layar
+
+| Key | Teks |
+|---|---|
+| `screen.reviewTitle` | `Periksa QR` |
+| `screen.quoteTitle` | `Konfirmasi` |
+| `screen.resultTitle` | `Hasil transaksi demo` |
+| `screen.receiptTitle` | `Detail transaksi` |
+| `screen.historyTitle` | `Riwayat` |
+| `screen.settingsTitle` | `Pengaturan demo` |
+
+## 13. Hasil transaksi
+
+| Key | Teks |
+|---|---|
+| `result.completedBody` | `Emas yang disimulasikan terjual. Merchant belum menerima dana.` |
+| `result.failedBody` | `Tidak ada saldo yang dipotong dan tidak ada transaksi yang disimpan.` |
+
+## 14. Aturan penulisan
 
 1. Format rupiah: `Rp150.000` (tanpa spasi, tanpa desimal).
 2. Format gram: `0,1021 g` (koma desimal, 4 digit).

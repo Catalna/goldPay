@@ -55,6 +55,8 @@ output, bukan ringkasan.
 ## Konvensi kode
 
 - Dart 3: gunakan `sealed class`, `final class`, pattern matching untuk `Result`.
+- Flutter 3.47+: impor Material dari `package:material_ui/material_ui.dart`; `package:flutter/material.dart`
+  sudah deprecated. Jangan mencampur keduanya.
 - Domain tidak boleh `throw` untuk input pengguna; kembalikan `QrisFailure`/`Err`.
 - Uang/emas: `int`. Pembulatan: `ceilDiv(a, b) => (a + b - 1) ~/ b`.
 - Parser bekerja pada `Uint8List`; panjang TLV = **byte UTF-8**, bukan `String.length`.

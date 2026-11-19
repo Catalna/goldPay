@@ -6,7 +6,7 @@
 ## 1. Kebutuhan
 
 - Ponsel Android 10+ dengan kamera dan autofocus.
-- `minSdk 23` (proyek), Android 10+ disarankan untuk hasil kamera terbaik.
+- `minSdk 24` (proyek, D-46), Android 10+ disarankan untuk hasil kamera terbaik.
 - Kabel data yang benar-benar mendukung transfer data.
 - Flutter + Android Platform-Tools.
 - USB debugging diaktifkan oleh pemilik perangkat.

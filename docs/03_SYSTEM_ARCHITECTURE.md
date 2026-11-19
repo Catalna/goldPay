@@ -156,6 +156,10 @@ Controller yang dibutuhkan:
 
 - Tidak ada `http`, `dio`, `firebase`, atau analytics.
 - Manifest release menghapus `android.permission.INTERNET` (D-06).
+- ML Kit (lewat `transport-backend-cct`) menambahkan `ACCESS_NETWORK_STATE`. Permission itu
+  hanya membaca status konektivitas dan **tidak** memberi akses jaringan; tanpa `INTERNET`
+  tidak ada byte yang bisa dikirim. Tidak dihapus agar telemetry ML Kit tidak melempar
+  `SecurityException`.
 - `google_fonts` tidak dipakai; font dari `assets/fonts/` (D-07).
 - Bukti: `aapt dump permissions app-release.apk` tidak memuat `INTERNET`.
 

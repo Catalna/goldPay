@@ -95,6 +95,7 @@ Semua implementasi (manusia atau AI) **wajib membaca file ini sebelum menulis ko
 | D-43 | Demo Settings menyediakan **pilih gambar QR dari galeri** (`analyzeImage`). | Fallback kedua + jalur aksesibilitas. |
 | D-44 | Demo Settings menyediakan toggle **"Paksa gagal transaksi berikutnya"**. Deterministik, tanpa network. | Memenuhi FR kegagalan simulasi dan lolos QA. |
 | D-45 | Fallback wajib diberi label "Sumber: tempel manual / galeri", bukan menyamar sebagai scan kamera. | Kejujuran demo. |
+| D-46 | `minSdk 24` (menggantikan 23 di D-04), mengikuti minimum Flutter 3.50 stable; `compileSdk`/`targetSdk` 36. | Flutter tool menolak/meng-upgrade `minSdk 23` otomatis; 24 tetap mencakup perangkat demo. **Butuh persetujuan pemilik produk.** |
 
 ---
 
