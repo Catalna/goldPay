@@ -183,13 +183,17 @@ Keduanya **tidak boleh** mencantumkan `INTERNET`.
 
 ## 12. Checklist rilis
 
-- [ ] `flutter analyze` bersih (atau warning didokumentasikan).
-- [ ] Seluruh unit/widget/integration test lulus.
-- [ ] Fuzz 10.000 input lulus.
-- [ ] Fixture F01–F10 sesuai harapan.
-- [ ] Verifikasi tanpa permission `INTERNET` lulus.
-- [ ] Restart & reset terverifikasi di perangkat.
-- [ ] APK release terpasang di perangkat demo.
-- [ ] QR cetak cadangan tersedia dan terbaca.
-- [ ] Naskah demo dilatih 2×.
-- [ ] Tidak ada aset/logo pihak ketiga di app.
+- [x] `flutter analyze` bersih — 19 Nov 2026: `No issues found!`.
+- [x] Seluruh unit/widget test lulus — `flutter test`: 81 test.
+- [x] Fuzz 10.000 input lulus — `test/domain/qris/qris_parser_test.dart`.
+- [x] Fixture F01–F10 sesuai harapan — `flutter test test/domain/qris`.
+- [x] Verifikasi tanpa permission `INTERNET` lulus — `aapt dump permissions` hanya
+      mencantumkan `CAMERA`, `ACCESS_NETWORK_STATE`, dan
+      `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`.
+- [x] Restart & reset terverifikasi di perangkat — saldo 1,1479 g dan 1 transaksi bertahan
+      setelah force-stop; reset mengembalikan 1,2500 g dan 0 transaksi.
+- [x] APK release terpasang di perangkat demo — `app-release.apk` 65,9 MB, `id.goldpay.concept`.
+- [ ] QR cetak cadangan tersedia dan terbaca — PNG cetak ada, belum dipindai di perangkat.
+- [ ] Naskah demo dilatih 2× — belum dilakukan.
+- [x] Tidak ada aset/logo pihak ketiga di app — ikon launcher dibuat sendiri, font
+      Plus Jakarta Sans berlisensi OFL, tanpa logo Pegadaian maupun merchant.
