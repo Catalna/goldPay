@@ -92,7 +92,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text(CopyId.screenHistoryTitle), findsOneWidget);
+    // Title in the header plus the Riwayat tab in the bottom bar.
+    expect(find.text(CopyId.screenHistoryTitle), findsNWidgets(2));
 
     await tester.tap(find.text('Warung Bu Tini'));
     await tester.pumpAndSettle();
