@@ -11,13 +11,13 @@ import '../../../core/formatters/datetime.dart';
 import '../../../core/formatters/gold.dart';
 import '../../../core/formatters/money.dart';
 import '../../../core/widgets/app_button.dart';
+import '../../../core/widgets/app_shell.dart';
 import '../../../core/widgets/demo_banner.dart';
 import '../../../core/widgets/info_row.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../checkout/application/checkout_controller.dart';
 
-/// Quote / confirmation (docs/09 §2.4). The button is disabled rather than
-/// showing a snackbar when the balance is short or the quote expired.
+/// Quote / confirmation (docs/09 §2.4). Modern fintech styling.
 class QuotePage extends ConsumerStatefulWidget {
   const QuotePage({super.key});
 
@@ -93,12 +93,15 @@ class _QuotePageState extends ConsumerState<QuotePage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const CircularProgressIndicator(color: Colors.white),
+                  const CircularProgressIndicator(color: GoldPayTokens.gold),
                   const SizedBox(height: GoldPayTokens.space24),
                   Text(
                     CopyId.statusProcessing,
                     textAlign: TextAlign.center,
-                    style: textTheme.titleLarge?.copyWith(color: Colors.white),
+                    style: textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ],
               ),
@@ -130,16 +133,15 @@ class _QuotePageState extends ConsumerState<QuotePage> {
     final insufficient = quote.goldUnits > balance;
     final canConfirm = !expired && !insufficient;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          tooltip: CopyId.navBack,
-          onPressed: () => context.go('/'),
-          icon: const Icon(Icons.close),
-        ),
-        title: const Text(CopyId.screenQuoteTitle),
+    return AppShell(
+      titleText: CopyId.screenQuoteTitle,
+      leading: IconButton(
+        tooltip: CopyId.navBack,
+        color: GoldPayTokens.ink,
+        onPressed: () => context.go('/'),
+        icon: const Icon(Icons.close_rounded, size: 20),
       ),
-      body: ListView(
+      child: ListView(
         padding: const EdgeInsets.fromLTRB(
           GoldPayTokens.pagePadding,
           GoldPayTokens.space8,
@@ -147,6 +149,148 @@ class _QuotePageState extends ConsumerState<QuotePage> {
           GoldPayTokens.space32,
         ),
         children: [
+          // Total Hero Conversion Card
+          Container(
+            padding: const EdgeInsets.all(GoldPayTokens.space20),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [GoldPayTokens.primaryDark, Color(0xFF144B3B)],
+              ),
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: GoldPayTokens.primaryDark.withValues(alpha: 0.25),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        CopyId.labelTotal.toUpperCase(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Color(0xFF9FC4B3),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: GoldPayTokens.space8),
+                    Flexible(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(
+                            '${formatRupiah(quote.goldBuybackPriceIdrPerGram)}/g',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: GoldPayTokens.space12),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    formatRupiah(quote.totalIdr),
+                    style: textTheme.displaySmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${CopyId.labelAmount}: ${formatRupiah(quote.paymentAmountIdr)}'
+                  '${quote.qrFeeIdr > 0 ? ' (+${formatRupiah(quote.qrFeeIdr)})' : ''}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.75),
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: GoldPayTokens.space16),
+          // Timer Countdown Pill
+          Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              decoration: BoxDecoration(
+                color: expired
+                    ? GoldPayTokens.danger.withValues(alpha: 0.1)
+                    : GoldPayTokens.goldSoft,
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: expired
+                      ? GoldPayTokens.danger.withValues(alpha: 0.3)
+                      : GoldPayTokens.goldBorder,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.schedule_rounded,
+                    size: 15,
+                    color: expired
+                        ? GoldPayTokens.danger
+                        : GoldPayTokens.goldInk,
+                  ),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      expired
+                          ? CopyId.quoteExpiredBody
+                          : CopyId.quoteValidUntil.replaceFirst(
+                              '{time}',
+                              formatTimeId(quote.validUntil),
+                            ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: expired
+                            ? GoldPayTokens.danger
+                            : GoldPayTokens.goldInk,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: GoldPayTokens.space16),
+          // Conversion Details
           SectionCard(
             child: Column(
               children: [
@@ -159,19 +303,6 @@ class _QuotePageState extends ConsumerState<QuotePage> {
                     label: CopyId.labelQrFee,
                     value: formatRupiah(quote.qrFeeIdr),
                   ),
-                const Divider(height: GoldPayTokens.space24),
-                InfoRow(
-                  label: CopyId.labelTotal,
-                  value: formatRupiah(quote.totalIdr),
-                  emphasize: true,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: GoldPayTokens.space12),
-          SectionCard(
-            child: Column(
-              children: [
                 InfoRow(
                   label: CopyId.labelGoldPriceUsed,
                   value: '${formatRupiah(quote.goldBuybackPriceIdrPerGram)}/g',
@@ -189,6 +320,7 @@ class _QuotePageState extends ConsumerState<QuotePage> {
                   label: CopyId.labelRounding,
                   value: formatRupiah(quote.roundingIdr),
                 ),
+                const Divider(height: 16),
                 InfoRow(
                   label: CopyId.labelBalanceBefore,
                   value: formatGoldUnits(balance),
@@ -196,67 +328,97 @@ class _QuotePageState extends ConsumerState<QuotePage> {
                 InfoRow(
                   label: CopyId.labelBalanceAfter,
                   value: formatGoldUnits(balance - quote.goldUnits),
+                  emphasize: true,
                 ),
               ],
             ),
           ),
           const SizedBox(height: GoldPayTokens.space12),
-          Text(CopyId.quoteRoundingNote, style: textTheme.bodySmall),
-          const SizedBox(height: GoldPayTokens.space8),
+          Text(
+            CopyId.quoteRoundingNote,
+            style: textTheme.bodySmall?.copyWith(fontSize: 11),
+          ),
+          const SizedBox(height: 4),
           Text(
             CopyId.disclaimerPrice,
-            style: textTheme.bodySmall?.copyWith(color: GoldPayTokens.warning),
+            style: textTheme.bodySmall?.copyWith(
+              color: GoldPayTokens.warning,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: GoldPayTokens.space16),
+          const SizedBox(height: GoldPayTokens.space12),
           Text(
             CopyId.quoteConfirmIntro,
-            style: textTheme.bodyMedium?.copyWith(color: GoldPayTokens.goldInk),
-          ),
-          const SizedBox(height: GoldPayTokens.space8),
-          Text(
-            expired
-                ? CopyId.quoteExpiredBody
-                : CopyId.quoteValidUntil.replaceFirst(
-                    '{time}',
-                    formatTimeId(quote.validUntil),
-                  ),
-            style: textTheme.bodySmall,
+            style: textTheme.bodyMedium?.copyWith(
+              color: GoldPayTokens.goldInk,
+              fontSize: 13,
+            ),
           ),
           if (insufficient) ...[
-            const SizedBox(height: GoldPayTokens.space8),
-            Text(
-              CopyId.statusInsufficient,
-              style: textTheme.bodyMedium?.copyWith(
-                color: GoldPayTokens.danger,
+            const SizedBox(height: GoldPayTokens.space12),
+            Container(
+              padding: const EdgeInsets.all(GoldPayTokens.space12),
+              decoration: BoxDecoration(
+                color: GoldPayTokens.danger.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: GoldPayTokens.danger.withValues(alpha: 0.3),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    CopyId.statusInsufficient,
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: GoldPayTokens.danger,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    CopyId.quoteInsufficientBody
+                        .replaceFirst(
+                          '{rupiah}',
+                          formatRupiah(quote.shortfallIdr),
+                        )
+                        .replaceFirst(
+                          '{gram}',
+                          formatGoldUnits(quote.shortfallUnits),
+                        ),
+                    style: textTheme.bodySmall?.copyWith(
+                      color: GoldPayTokens.danger,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Text(
-              CopyId.quoteInsufficientBody
-                  .replaceFirst('{rupiah}', formatRupiah(quote.shortfallIdr))
-                  .replaceFirst(
-                    '{gram}',
-                    formatGoldUnits(quote.shortfallUnits),
-                  ),
-              style: textTheme.bodySmall?.copyWith(color: GoldPayTokens.danger),
-            ),
           ],
-          const SizedBox(height: GoldPayTokens.space16),
+          const SizedBox(height: GoldPayTokens.space20),
           if (expired)
-            AppButton(label: CopyId.navRefreshQuote, onPressed: _refresh)
+            AppButton(
+              label: CopyId.navRefreshQuote,
+              variant: AppButtonVariant.gold,
+              onPressed: _refresh,
+            )
           else
             AppButton(
               label: CopyId.navConfirm,
+              variant: AppButtonVariant.primary,
               onPressed: canConfirm ? _confirm : null,
             ),
           const SizedBox(height: GoldPayTokens.space8),
-          TextButton(
-            onPressed: () {
-              ref.read(checkoutProvider.notifier).cancel();
-              context.go('/');
-            },
-            child: const Text(CopyId.navCancel),
+          Center(
+            child: TextButton(
+              onPressed: () {
+                ref.read(checkoutProvider.notifier).cancel();
+                context.go('/');
+              },
+              child: const Text(CopyId.navCancel),
+            ),
           ),
-          const SizedBox(height: GoldPayTokens.space16),
+          const SizedBox(height: GoldPayTokens.space12),
           const DemoBanner(),
         ],
       ),

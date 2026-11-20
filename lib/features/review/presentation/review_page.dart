@@ -8,13 +8,14 @@ import '../../../core/constants/copy_id.dart';
 import '../../../core/formatters/money.dart';
 import '../../../core/formatters/rupiah_input_formatter.dart';
 import '../../../core/widgets/app_button.dart';
+import '../../../core/widgets/app_shell.dart';
 import '../../../core/widgets/demo_banner.dart';
 import '../../../core/widgets/info_row.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../checkout/application/checkout_controller.dart';
 import '../../shared/presentation/qris_copy.dart';
 
-/// Review / nominal entry (docs/09 §2.3). Dynamic QRs lock the amount.
+/// Review / nominal entry (docs/09 §2.3). Modern fintech styling.
 class ReviewPage extends ConsumerStatefulWidget {
   const ReviewPage({super.key});
 
@@ -55,6 +56,16 @@ class _ReviewPageState extends ConsumerState<ReviewPage> {
       error = null;
     }
     if (error != _error) setState(() => _error = error);
+  }
+
+  void _setPresetAmount(int amount) {
+    _amountController.text = formatRupiah(amount).replaceFirst('Rp', '');
+    final config = ref.read(demoConfigProvider);
+    _validate(
+      _amountController.text,
+      config.minPaymentIdr,
+      config.maxPaymentIdr,
+    );
   }
 
   void _continue() {
@@ -108,16 +119,15 @@ class _ReviewPageState extends ConsumerState<ReviewPage> {
               amount >= config.minPaymentIdr &&
               amount <= config.maxPaymentIdr;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          tooltip: CopyId.navBack,
-          onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: const Text(CopyId.screenReviewTitle),
+    return AppShell(
+      titleText: CopyId.screenReviewTitle,
+      leading: IconButton(
+        tooltip: CopyId.navBack,
+        color: GoldPayTokens.ink,
+        onPressed: () => context.pop(),
+        icon: const Icon(Icons.arrow_back_rounded, size: 20),
       ),
-      body: ListView(
+      child: ListView(
         padding: const EdgeInsets.fromLTRB(
           GoldPayTokens.pagePadding,
           GoldPayTokens.space8,
@@ -127,20 +137,53 @@ class _ReviewPageState extends ConsumerState<ReviewPage> {
         children: [
           const DemoBanner(),
           const SizedBox(height: GoldPayTokens.space16),
+          // Merchant Card
           SectionCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  merchantNameCopy(draft.merchantName),
-                  style: textTheme.headlineMedium,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: GoldPayTokens.primarySoft,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.storefront_rounded,
+                          color: GoldPayTokens.primaryDark,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: GoldPayTokens.space12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            merchantNameCopy(draft.merchantName),
+                            style: textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '${merchantCityCopy(draft.merchantCity)} · '
+                            '${issuerCopy(draft.merchantIssuerGui)}',
+                            style: textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: GoldPayTokens.space4),
-                Text(
-                  '${merchantCityCopy(draft.merchantCity)} · '
-                  '${issuerCopy(draft.merchantIssuerGui)}',
-                  style: textTheme.bodySmall,
-                ),
+                const SizedBox(height: GoldPayTokens.space16),
+                const Divider(height: 1),
                 const SizedBox(height: GoldPayTokens.space12),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -152,11 +195,11 @@ class _ReviewPageState extends ConsumerState<ReviewPage> {
                   children: [
                     Icon(
                       draft.crcValid
-                          ? Icons.check_circle_outline
-                          : Icons.error_outline,
-                      size: 18,
+                          ? Icons.check_circle_outline_rounded
+                          : Icons.error_outline_rounded,
+                      size: 16,
                       color: draft.crcValid
-                          ? GoldPayTokens.info
+                          ? GoldPayTokens.success
                           : GoldPayTokens.warning,
                     ),
                     const SizedBox(width: GoldPayTokens.space8),
@@ -170,8 +213,7 @@ class _ReviewPageState extends ConsumerState<ReviewPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: GoldPayTokens.space4),
-                // Fallback sources must never pass for a camera scan (D-45).
+                const SizedBox(height: GoldPayTokens.space8),
                 InfoRow(
                   label: CopyId.labelSource,
                   value: sourceCopy(draft.source),
@@ -183,29 +225,93 @@ class _ReviewPageState extends ConsumerState<ReviewPage> {
             const SizedBox(height: GoldPayTokens.space12),
             _WarningsCard(codes: draft.warningCodes),
           ],
-          const SizedBox(height: GoldPayTokens.space24),
+          const SizedBox(height: GoldPayTokens.space20),
+          // Amount Section
           if (draft.amountReadOnly) ...[
-            Text(CopyId.labelAmount, style: textTheme.bodySmall),
-            const SizedBox(height: GoldPayTokens.space4),
-            Text(
-              formatRupiah(amount),
-              style: textTheme.displaySmall?.copyWith(
-                fontFeatures: const [FontFeature.tabularFigures()],
+            SectionCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(CopyId.labelAmount, style: textTheme.bodySmall),
+                      const Icon(
+                        Icons.lock_outline_rounded,
+                        size: 16,
+                        color: GoldPayTokens.inkMuted,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: GoldPayTokens.space8),
+                  Text(
+                    formatRupiah(amount),
+                    style: textTheme.displaySmall?.copyWith(
+                      color: GoldPayTokens.ink,
+                      fontWeight: FontWeight.w800,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                  const SizedBox(height: GoldPayTokens.space4),
+                  Text(
+                    CopyId.labelQrAmountLocked,
+                    style: textTheme.bodySmall?.copyWith(
+                      color: GoldPayTokens.inkMuted,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: GoldPayTokens.space4),
-            Text(CopyId.labelQrAmountLocked, style: textTheme.bodySmall),
           ] else ...[
-            TextField(
-              controller: _amountController,
-              keyboardType: TextInputType.number,
-              inputFormatters: const [RupiahInputFormatter()],
-              onChanged: (value) =>
-                  _validate(value, config.minPaymentIdr, config.maxPaymentIdr),
-              decoration: InputDecoration(
-                labelText: CopyId.labelAmount,
-                prefixText: 'Rp',
-                errorText: _error,
+            SectionCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    CopyId.labelAmount,
+                    style: textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: GoldPayTokens.space12),
+                  TextField(
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: const [RupiahInputFormatter()],
+                    onChanged: (value) => _validate(
+                      value,
+                      config.minPaymentIdr,
+                      config.maxPaymentIdr,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: CopyId.labelAmount,
+                      prefixText: 'Rp',
+                      errorText: _error,
+                      hintText: '0',
+                    ),
+                  ),
+                  const SizedBox(height: GoldPayTokens.space12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [10000, 25000, 50000, 100000].map((preset) {
+                      return ActionChip(
+                        label: Text(
+                          formatRupiah(preset),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        backgroundColor: GoldPayTokens.surface,
+                        side: const BorderSide(color: GoldPayTokens.border),
+                        shape: const StadiumBorder(),
+                        onPressed: () => _setPresetAmount(preset),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
             ),
           ],
@@ -228,10 +334,7 @@ class _Chip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: GoldPayTokens.space12,
-        vertical: GoldPayTokens.space4,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: GoldPayTokens.primarySoft,
         borderRadius: BorderRadius.circular(999),
@@ -240,7 +343,8 @@ class _Chip extends StatelessWidget {
         label,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
           color: GoldPayTokens.primaryDark,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
+          fontSize: 11,
         ),
       ),
     );
@@ -256,6 +360,8 @@ class _WarningsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return SectionCard(
+      backgroundColor: GoldPayTokens.goldSoft,
+      borderColor: GoldPayTokens.goldBorder,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -266,15 +372,18 @@ class _WarningsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(
-                    Icons.info_outline,
-                    size: 18,
+                    Icons.info_outline_rounded,
+                    size: 16,
                     color: GoldPayTokens.warning,
                   ),
                   const SizedBox(width: GoldPayTokens.space8),
                   Expanded(
                     child: Text(
                       qrisWarningCopy(code),
-                      style: textTheme.bodySmall,
+                      style: textTheme.bodySmall?.copyWith(
+                        color: GoldPayTokens.goldInk,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ],

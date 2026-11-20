@@ -11,6 +11,7 @@ import '../../../core/constants/payment_source.dart';
 import '../../../core/formatters/gold.dart';
 import '../../../core/formatters/money.dart';
 import '../../../core/widgets/app_button.dart';
+import '../../../core/widgets/app_shell.dart';
 import '../../../core/widgets/demo_banner.dart';
 import '../../../core/widgets/info_row.dart';
 import '../../../core/widgets/section_card.dart';
@@ -18,7 +19,7 @@ import '../../checkout/application/checkout_controller.dart';
 import '../../checkout/application/draft_builder.dart';
 import '../../shared/presentation/qris_copy.dart';
 
-/// Demo Settings (docs/09 §2.9): fallbacks, balance, data, info.
+/// Demo Settings (docs/09 §2.9): fallbacks, balance, data, info. Modern styling.
 class DemoSettingsPage extends ConsumerStatefulWidget {
   const DemoSettingsPage({super.key});
 
@@ -98,7 +99,14 @@ class _DemoSettingsPageState extends ConsumerState<DemoSettingsPage> {
         return StatefulBuilder(
           builder: (dialogContext, setDialogState) {
             return AlertDialog(
-              title: const Text(CopyId.dialogAddGoldTitle),
+              backgroundColor: GoldPayTokens.card,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(GoldPayTokens.sheetRadius),
+              ),
+              title: const Text(
+                CopyId.dialogAddGoldTitle,
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +130,11 @@ class _DemoSettingsPageState extends ConsumerState<DemoSettingsPage> {
                   onPressed: () => Navigator.of(dialogContext).pop(),
                   child: const Text(CopyId.navCancel),
                 ),
-                TextButton(
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: GoldPayTokens.primaryDark,
+                    shape: const StadiumBorder(),
+                  ),
                   onPressed: () {
                     final parsed = parseGoldGramsToUnits(controller.text);
                     if (parsed == null || parsed <= 0) {
@@ -157,14 +169,25 @@ class _DemoSettingsPageState extends ConsumerState<DemoSettingsPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text(CopyId.dialogResetTitle),
+        backgroundColor: GoldPayTokens.card,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(GoldPayTokens.sheetRadius),
+        ),
+        title: const Text(
+          CopyId.dialogResetTitle,
+          style: TextStyle(fontWeight: FontWeight.w700),
+        ),
         content: const Text(CopyId.dialogResetBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
             child: const Text(CopyId.navCancel),
           ),
-          TextButton(
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: GoldPayTokens.danger,
+              shape: const StadiumBorder(),
+            ),
             onPressed: () => Navigator.of(dialogContext).pop(true),
             child: const Text(CopyId.dialogResetConfirm),
           ),
@@ -192,16 +215,10 @@ class _DemoSettingsPageState extends ConsumerState<DemoSettingsPage> {
     final balanceUnits = demoState.value?.balanceUnits;
     final txCount = demoState.value?.transactions.length;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          tooltip: CopyId.navBack,
-          onPressed: () => context.go('/'),
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: const Text(CopyId.screenSettingsTitle),
-      ),
-      body: ListView(
+    return AppShell(
+      currentTab: AppShellTab.settings,
+      titleText: CopyId.screenSettingsTitle,
+      child: ListView(
         padding: const EdgeInsets.fromLTRB(
           GoldPayTokens.pagePadding,
           GoldPayTokens.space8,
@@ -211,15 +228,39 @@ class _DemoSettingsPageState extends ConsumerState<DemoSettingsPage> {
         children: [
           const DemoBanner(),
           const SizedBox(height: GoldPayTokens.space16),
-          Text(
-            CopyId.settingsDevOnly,
-            style: textTheme.bodySmall?.copyWith(
-              color: GoldPayTokens.warning,
-              fontWeight: FontWeight.w600,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: GoldPayTokens.goldSoft,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: GoldPayTokens.goldBorder),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.handyman_rounded,
+                  size: 16,
+                  color: GoldPayTokens.warning,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    CopyId.settingsDevOnly,
+                    style: textTheme.bodySmall?.copyWith(
+                      color: GoldPayTokens.warning,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: GoldPayTokens.space12),
-          Text(CopyId.settingsSectionFallback, style: textTheme.titleLarge),
+          const SizedBox(height: GoldPayTokens.space20),
+          Text(
+            CopyId.settingsSectionFallback,
+            style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: GoldPayTokens.space8),
           SectionCard(
             child: Column(
@@ -238,6 +279,7 @@ class _DemoSettingsPageState extends ConsumerState<DemoSettingsPage> {
                 const SizedBox(height: GoldPayTokens.space12),
                 AppButton(
                   label: CopyId.settingsPasteAction,
+                  variant: AppButtonVariant.primary,
                   onPressed: _busy ? null : _usePastedPayload,
                 ),
                 const SizedBox(height: GoldPayTokens.space8),
@@ -249,7 +291,13 @@ class _DemoSettingsPageState extends ConsumerState<DemoSettingsPage> {
                 const Divider(height: GoldPayTokens.space24),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text(CopyId.settingsFailureToggle),
+                  activeThumbColor: GoldPayTokens.primaryDark,
+                  title: Text(
+                    CopyId.settingsFailureToggle,
+                    style: textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                   subtitle: const Text(CopyId.settingsFailureHint),
                   value: forceFailure,
                   onChanged: (value) =>
@@ -259,7 +307,10 @@ class _DemoSettingsPageState extends ConsumerState<DemoSettingsPage> {
             ),
           ),
           const SizedBox(height: GoldPayTokens.space24),
-          Text(CopyId.settingsSectionBalance, style: textTheme.titleLarge),
+          Text(
+            CopyId.settingsSectionBalance,
+            style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: GoldPayTokens.space8),
           SectionCard(
             child: Column(
@@ -284,14 +335,17 @@ class _DemoSettingsPageState extends ConsumerState<DemoSettingsPage> {
                 const SizedBox(height: GoldPayTokens.space12),
                 AppButton(
                   label: CopyId.navAddGold,
-                  variant: AppButtonVariant.secondary,
+                  variant: AppButtonVariant.gold,
                   onPressed: _addGold,
                 ),
               ],
             ),
           ),
           const SizedBox(height: GoldPayTokens.space24),
-          Text(CopyId.settingsSectionData, style: textTheme.titleLarge),
+          Text(
+            CopyId.settingsSectionData,
+            style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: GoldPayTokens.space8),
           AppButton(
             label: CopyId.navReset,
@@ -299,7 +353,10 @@ class _DemoSettingsPageState extends ConsumerState<DemoSettingsPage> {
             onPressed: _reset,
           ),
           const SizedBox(height: GoldPayTokens.space24),
-          Text(CopyId.settingsSectionInfo, style: textTheme.titleLarge),
+          Text(
+            CopyId.settingsSectionInfo,
+            style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: GoldPayTokens.space8),
           SectionCard(
             child: Column(

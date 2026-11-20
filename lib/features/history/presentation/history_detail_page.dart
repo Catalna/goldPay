@@ -9,12 +9,13 @@ import '../../../core/formatters/datetime.dart';
 import '../../../core/formatters/gold.dart';
 import '../../../core/formatters/money.dart';
 import '../../../core/widgets/app_button.dart';
+import '../../../core/widgets/app_shell.dart';
 import '../../../core/widgets/demo_banner.dart';
 import '../../../core/widgets/info_row.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../shared/presentation/qris_copy.dart';
 
-/// Receipt detail (docs/09 §2.8). Nothing here can re-run a payment.
+/// Receipt detail (docs/09 §2.8).
 class HistoryDetailPage extends ConsumerWidget {
   const HistoryDetailPage({required this.transactionId, super.key});
 
@@ -28,16 +29,15 @@ class HistoryDetailPage extends ConsumerWidget {
         .where((item) => item.id == transactionId)
         .firstOrNull;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          tooltip: CopyId.navBack,
-          onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: const Text(CopyId.screenReceiptTitle),
+    return AppShell(
+      titleText: CopyId.screenReceiptTitle,
+      leading: IconButton(
+        tooltip: CopyId.navBack,
+        color: GoldPayTokens.ink,
+        onPressed: () => context.pop(),
+        icon: const Icon(Icons.arrow_back_rounded, size: 20),
       ),
-      body: transaction == null
+      child: transaction == null
           ? Center(
               child: Padding(
                 padding: const EdgeInsets.all(GoldPayTokens.pagePadding),
@@ -60,6 +60,46 @@ class HistoryDetailPage extends ConsumerWidget {
                 SectionCard(
                   child: Column(
                     children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: GoldPayTokens.space12,
+                          horizontal: GoldPayTokens.space16,
+                        ),
+                        decoration: BoxDecoration(
+                          color: GoldPayTokens.surface,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              merchantNameCopy(transaction.merchantName),
+                              style: textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              formatRupiah(transaction.totalIdr),
+                              style: textTheme.displaySmall?.copyWith(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w800,
+                                fontFeatures: const [
+                                  FontFeature.tabularFigures(),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              '≈ ${formatGoldUnits(transaction.goldUnits)} emas',
+                              style: textTheme.bodySmall?.copyWith(
+                                color: GoldPayTokens.goldInk,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: GoldPayTokens.space12),
                       InfoRow(
                         label: CopyId.labelStatus,
                         value: CopyId.statusCompleted,
@@ -191,14 +231,13 @@ class HistoryDetailPage extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: GoldPayTokens.space24),
-                Text(CopyId.disclaimerReceipt, style: textTheme.bodySmall),
+                Text(
+                  CopyId.disclaimerReceipt,
+                  textAlign: TextAlign.center,
+                  style: textTheme.bodySmall?.copyWith(fontSize: 11),
+                ),
               ],
             ),
     );
   }
-}
-
-/// `firstOrNull` without pulling in `package:collection`.
-extension _FirstOrNull<T> on Iterable<T> {
-  T? get firstOrNull => isEmpty ? null : first;
 }

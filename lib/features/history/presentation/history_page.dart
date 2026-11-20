@@ -6,6 +6,7 @@ import '../../../app/providers.dart';
 import '../../../app/theme/tokens.dart';
 import '../../../core/constants/copy_id.dart';
 import '../../../core/widgets/app_button.dart';
+import '../../../core/widgets/app_shell.dart';
 import '../../../core/widgets/demo_banner.dart';
 import 'widgets/transaction_summary_card.dart';
 
@@ -17,17 +18,13 @@ class HistoryPage extends ConsumerWidget {
     final demoState = ref.watch(demoStateProvider);
     final textTheme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          tooltip: CopyId.navBack,
-          onPressed: () => context.go('/'),
-          icon: const Icon(Icons.arrow_back),
+    return AppShell(
+      currentTab: AppShellTab.history,
+      titleText: CopyId.screenHistoryTitle,
+      child: demoState.when(
+        loading: () => const Center(
+          child: CircularProgressIndicator(color: GoldPayTokens.primary),
         ),
-        title: const Text(CopyId.screenHistoryTitle),
-      ),
-      body: demoState.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => Center(
           child: Padding(
             padding: const EdgeInsets.all(GoldPayTokens.pagePadding),
@@ -49,16 +46,26 @@ class HistoryPage extends ConsumerWidget {
               children: [
                 const DemoBanner(),
                 const SizedBox(height: GoldPayTokens.space32),
-                const Icon(
-                  Icons.receipt_long_outlined,
-                  size: 32,
-                  color: GoldPayTokens.inkMuted,
+                Center(
+                  child: Container(
+                    width: 56,
+                    height: 56,
+                    decoration: const BoxDecoration(
+                      color: GoldPayTokens.primarySoft,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.receipt_long_outlined,
+                      size: 28,
+                      color: GoldPayTokens.primaryDark,
+                    ),
+                  ),
                 ),
-                const SizedBox(height: GoldPayTokens.space8),
+                const SizedBox(height: GoldPayTokens.space12),
                 Text(
                   CopyId.historyEmpty,
                   textAlign: TextAlign.center,
-                  style: textTheme.bodySmall,
+                  style: textTheme.bodySmall?.copyWith(fontSize: 14),
                 ),
                 const SizedBox(height: GoldPayTokens.space24),
                 AppButton(
