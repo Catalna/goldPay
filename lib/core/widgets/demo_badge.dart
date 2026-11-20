@@ -19,10 +19,10 @@ class DemoBadge extends StatelessWidget {
       child: const Text(
         CopyId.badgeDemo,
         style: TextStyle(
-          fontSize: 11,
-          height: 14 / 11,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.6,
+          fontSize: 10,
+          height: 13 / 10,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.8,
           color: GoldPayTokens.goldInk,
         ),
       ),

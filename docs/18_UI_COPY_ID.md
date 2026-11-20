@@ -24,8 +24,11 @@
 | Key | Teks |
 |---|---|
 | `nav.scan` | `Scan QRIS` |
+| `nav.scanTab` | `Scan` |
+| `nav.homeTab` | `Beranda` |
 | `nav.history` | `Riwayat` |
 | `nav.settings` | `Pengaturan demo` |
+| `nav.settingsTab` | `Pengaturan` |
 | `nav.back` | `Kembali` |
 | `nav.rescan` | `Scan ulang` |
 | `nav.enterAmount` | `Masukkan nominal` |

@@ -4,7 +4,7 @@ import 'tokens.dart';
 
 const String _fontFamily = 'PlusJakartaSans';
 
-/// Theme built only from docs/09 tokens. Do not add ad-hoc styling in widgets.
+/// Theme built from GoldPay design tokens.
 ThemeData buildGoldPayTheme() {
   final ColorScheme scheme =
       ColorScheme.fromSeed(
@@ -29,21 +29,22 @@ ThemeData buildGoldPayTheme() {
       displaySmall: TextStyle(
         fontSize: 34,
         height: 40 / 34,
-        fontWeight: FontWeight.w700,
-        letterSpacing: -0.6,
+        fontWeight: FontWeight.w800,
+        letterSpacing: -0.8,
         color: GoldPayTokens.ink,
       ),
       headlineMedium: TextStyle(
-        fontSize: 24,
-        height: 30 / 24,
+        fontSize: 22,
+        height: 28 / 22,
         fontWeight: FontWeight.w700,
         letterSpacing: -0.4,
         color: GoldPayTokens.ink,
       ),
       titleLarge: TextStyle(
-        fontSize: 20,
-        height: 26 / 20,
-        fontWeight: FontWeight.w600,
+        fontSize: 18,
+        height: 24 / 18,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.2,
         color: GoldPayTokens.ink,
       ),
       bodyLarge: TextStyle(
@@ -53,8 +54,8 @@ ThemeData buildGoldPayTheme() {
         color: GoldPayTokens.ink,
       ),
       bodyMedium: TextStyle(
-        fontSize: 16,
-        height: 24 / 16,
+        fontSize: 15,
+        height: 22 / 15,
         fontWeight: FontWeight.w600,
         color: GoldPayTokens.ink,
       ),
@@ -65,9 +66,9 @@ ThemeData buildGoldPayTheme() {
         color: GoldPayTokens.inkMuted,
       ),
       labelLarge: TextStyle(
-        fontSize: 16,
-        height: 20 / 16,
-        fontWeight: FontWeight.w600,
+        fontSize: 15,
+        height: 20 / 15,
+        fontWeight: FontWeight.w700,
         color: Colors.white,
       ),
     ),
@@ -96,6 +97,14 @@ ThemeData buildGoldPayTheme() {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(GoldPayTokens.cardRadius),
         borderSide: const BorderSide(color: GoldPayTokens.primary, width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(GoldPayTokens.cardRadius),
+        borderSide: const BorderSide(color: GoldPayTokens.danger),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(GoldPayTokens.cardRadius),
+        borderSide: const BorderSide(color: GoldPayTokens.danger, width: 1.5),
       ),
     ),
   );

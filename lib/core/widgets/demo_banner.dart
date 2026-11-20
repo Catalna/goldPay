@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../app/theme/tokens.dart';
 import '../constants/copy_id.dart';
 
-/// Persistent disclosure. Must appear on every transaction screen (docs/09 §3).
+/// Persistent disclosure banner. Must appear on every transaction screen (docs/09 §3).
 class DemoBanner extends StatelessWidget {
   const DemoBanner({super.key});
 
@@ -12,7 +12,7 @@ class DemoBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
-        horizontal: GoldPayTokens.space12,
+        horizontal: GoldPayTokens.space16,
         vertical: GoldPayTokens.space12,
       ),
       decoration: BoxDecoration(
@@ -24,7 +24,7 @@ class DemoBanner extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Icon(
-            Icons.info_outline,
+            Icons.info_outline_rounded,
             size: 18,
             color: GoldPayTokens.goldInk,
           ),
@@ -33,8 +33,8 @@ class DemoBanner extends StatelessWidget {
             child: Text(
               CopyId.disclaimerBanner,
               style: TextStyle(
-                fontSize: 13,
-                height: 18 / 13,
+                fontSize: 12,
+                height: 16 / 12,
                 fontWeight: FontWeight.w600,
                 color: GoldPayTokens.goldInk,
               ),

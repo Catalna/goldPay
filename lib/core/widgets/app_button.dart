@@ -2,9 +2,9 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../app/theme/tokens.dart';
 
-enum AppButtonVariant { primary, secondary, danger }
+enum AppButtonVariant { primary, secondary, danger, gold }
 
-/// Primary action button: 52 dp tall, 12 dp radius, full width.
+/// Action button: 52 dp tall, pill-shaped stadium border, full width.
 class AppButton extends StatelessWidget {
   const AppButton({
     required this.label,
@@ -25,30 +25,37 @@ class AppButton extends StatelessWidget {
 
     final ButtonStyle style = switch (variant) {
       AppButtonVariant.primary => FilledButton.styleFrom(
-        backgroundColor: GoldPayTokens.primary,
+        backgroundColor: GoldPayTokens.primaryDark,
         foregroundColor: Colors.white,
         disabledBackgroundColor: GoldPayTokens.border,
         disabledForegroundColor: GoldPayTokens.inkMuted,
         textStyle: textStyle,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(GoldPayTokens.cardRadius),
-        ),
+        elevation: 0,
+        shape: const StadiumBorder(),
+      ),
+      AppButtonVariant.gold => FilledButton.styleFrom(
+        backgroundColor: GoldPayTokens.gold,
+        foregroundColor: GoldPayTokens.ink,
+        disabledBackgroundColor: GoldPayTokens.border,
+        disabledForegroundColor: GoldPayTokens.inkMuted,
+        textStyle: textStyle?.copyWith(color: GoldPayTokens.ink),
+        elevation: 0,
+        shape: const StadiumBorder(),
       ),
       AppButtonVariant.danger => FilledButton.styleFrom(
         backgroundColor: GoldPayTokens.danger,
         foregroundColor: Colors.white,
         textStyle: textStyle,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(GoldPayTokens.cardRadius),
-        ),
+        elevation: 0,
+        shape: const StadiumBorder(),
       ),
       AppButtonVariant.secondary => OutlinedButton.styleFrom(
-        foregroundColor: GoldPayTokens.primary,
-        textStyle: textStyle?.copyWith(color: GoldPayTokens.primary),
+        foregroundColor: GoldPayTokens.ink,
+        backgroundColor: GoldPayTokens.card,
+        textStyle: textStyle?.copyWith(color: GoldPayTokens.ink),
         side: const BorderSide(color: GoldPayTokens.border),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(GoldPayTokens.cardRadius),
-        ),
+        elevation: 0,
+        shape: const StadiumBorder(),
       ),
     };
 

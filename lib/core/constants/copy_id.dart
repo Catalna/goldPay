@@ -22,8 +22,11 @@ abstract final class CopyId {
 
   // 2. Navigation and buttons
   static const String navScan = 'Scan QRIS';
+  static const String navScanTab = 'Scan';
+  static const String navHomeTab = 'Beranda';
   static const String navHistory = 'Riwayat';
   static const String navSettings = 'Pengaturan demo';
+  static const String navSettingsTab = 'Pengaturan';
   static const String navBack = 'Kembali';
   static const String navRescan = 'Scan ulang';
   static const String navEnterAmount = 'Masukkan nominal';
